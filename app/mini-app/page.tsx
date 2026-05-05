@@ -3,6 +3,8 @@ import MiniAppClient from './client'
 
 const prisma = new PrismaClient()
 
+export const dynamic = 'force-dynamic'
+
 export default async function MiniAppPage() {
   const items = await prisma.item.findMany({
     orderBy: { name: 'asc' },

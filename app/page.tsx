@@ -4,7 +4,7 @@ import AdminPanel from '@/components/AdminPanel';
 
 const prisma = new PrismaClient();
 
-export const revalidate = 0; // Disable static rendering
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   let items: any[] = [];

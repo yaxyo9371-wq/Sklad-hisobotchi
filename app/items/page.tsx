@@ -4,7 +4,7 @@ import ItemsList from '@/components/ItemsList'
 
 const prisma = new PrismaClient()
 
-export const revalidate = 0
+export const dynamic = 'force-dynamic'
 
 export default async function ItemsPage() {
   const items = await prisma.item.findMany({

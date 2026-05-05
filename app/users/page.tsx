@@ -3,7 +3,7 @@ import { Shield, ShieldAlert, User as UserIcon, Activity, Clock, MoreVertical, S
 
 const prisma = new PrismaClient()
 
-export const revalidate = 0
+export const dynamic = 'force-dynamic'
 
 export default async function UsersPage() {
   const users = await prisma.user.findMany({
