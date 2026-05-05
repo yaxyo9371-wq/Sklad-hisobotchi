@@ -38,7 +38,8 @@ bot.start(async (ctx) => {
       ])
     );
   } catch (error) {
-    ctx.reply("Assalomu alaykum! Sklad botiga xush kelibsiz.");
+    console.error("BOT START ERROR:", error);
+    ctx.reply("Assalomu alaykum! Sklad botiga xush kelibsiz. (Tizimga ulanishda vaqtinchalik xatolik bor)");
   }
 });
 
