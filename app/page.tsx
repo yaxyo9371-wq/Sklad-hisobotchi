@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
 export const revalidate = 0; // Disable static rendering
 
 export default async function Home() {
-  let items = [];
-  let recentTransactions = [];
+  let items: any[] = [];
+  let recentTransactions: any[] = [];
   
   try {
     items = await prisma.item.findMany({
@@ -108,7 +108,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <AdminPanel items={items.map(i => ({ id: i.id, name: i.name }))} />
+      <AdminPanel items={items.map((i: any) => ({ id: i.id, name: i.name }))} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
         {/* Inventory Table */}
