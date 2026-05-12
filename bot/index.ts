@@ -21,6 +21,10 @@ const prisma = new PrismaClient();
 const genAI = new GoogleGenerativeAI(geminiKey || '');
 
 bot.start(async (ctx) => {
+  if (ctx.chat.type !== 'private') {
+    return ctx.reply("Assalomu alaykum! Sklad bot guruhga qo'shildi.\nIshlatish uchun shaxsiy xabarda yozing yoki guruhda /chiqim buyrug'idan foydalaning.");
+  }
+
   const telegramId = String(ctx.from.id);
   const name = ctx.from.first_name || 'User';
 
@@ -34,12 +38,12 @@ bot.start(async (ctx) => {
     await ctx.reply(
       `Assalomu alaykum, ${name}! 👋\n\nSklad botiga xush kelibsiz.\nQuyidagi tugma orqali chiqimlarni kiritishingiz mumkin:`,
       Markup.inlineKeyboard([
-        [Markup.button.webApp('📦 Chiqim kiritish', miniAppUrl)]
+        [Markup.button.webApp('📦 Chiqim / Kirim', miniAppUrl)]
       ])
     );
   } catch (error) {
     console.error("BOT START ERROR:", error);
-    ctx.reply("Assalomu alaykum! Sklad botiga xush kelibsiz. (Tizimga ulanishda vaqtinchalik xatolik bor)");
+    ctx.reply("Assalomu alaykum! Sklad botiga xush kelibsiz. (Tizimga ulanishda xatolik: Baza vaqtincha ishlamayapti)");
   }
 });
 
@@ -110,6 +114,14 @@ async function processGeminiResponse(ctx: any, msg: any, result: any) {
 
 bot.on('text', async (ctx) => {
   if (ctx.message.text.startsWith('/')) return;
+
+  if (ctx.chat.type !== 'private') {
+    const botUsername = ctx.botInfo.username;
+    const isMentioned = ctx.message.text.includes(`@${botUsername}`);
+    const isReply = ctx.message.reply_to_message?.from?.id === ctx.botInfo.id;
+    if (!isMentioned && !isReply) return;
+  }
+
   if (!geminiKey || geminiKey === 'BU_YERGA_GEMINI_KEY_YOZING') {
       return ctx.reply('⚠️ Gemini API kaliti kiritilmagan.');
   }
@@ -129,6 +141,14 @@ bot.on('text', async (ctx) => {
 });
 
 bot.on('photo', async (ctx) => {
+    if (ctx.chat.type !== 'private') {
+      const botUsername = ctx.botInfo.username;
+      const caption = ctx.message.caption || '';
+      const isMentioned = caption.includes(`@${botUsername}`);
+      const isReply = ctx.message.reply_to_message?.from?.id === ctx.botInfo.id;
+      if (!isMentioned && !isReply) return;
+    }
+
     if (!geminiKey || geminiKey === 'BU_YERGA_GEMINI_KEY_YOZING') {
         return ctx.reply('⚠️ Gemini API kaliti kiritilmagan.');
     }
