@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
   let items: any[] = [];
   let recentTransactions: any[] = [];
+  let stats: any[] = [];
   
   try {
     items = await prisma.item.findMany({
@@ -23,13 +24,20 @@ export default async function Home() {
         item: true,
       }
     });
+
+    stats = await prisma.transaction.groupBy({
+      by: ['type'],
+      _sum: { quantity: true }
+    });
   } catch (error) {
     console.error("Baza hali initsializatsiya qilinmagan bo'lishi mumkin.");
   }
 
   const totalItems = items.length;
   const totalQuantity = items.reduce((acc, curr) => acc + curr.quantity, 0);
-  const lowStock = items.filter(i => i.quantity < 10).length;
+  
+  const totalTaken = Math.abs(stats.find(s => s.type === 'TAKE')?._sum?.quantity || 0);
+  const totalReturned = stats.find(s => s.type === 'ADD')?._sum?.quantity || 0;
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto min-h-full">
@@ -55,24 +63,7 @@ export default async function Home() {
       </header>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-3xl group-hover:bg-brand-500/20 transition-all"></div>
-          <div className="flex justify-between items-start mb-4 relative z-10">
-            <div>
-              <p className="text-zinc-900/50 text-sm font-medium mb-1">Jami Turlar</p>
-              <h3 className="text-3xl font-bold text-zinc-900">{totalItems}</h3>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
-              <Package size={24} />
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-xs font-medium text-emerald-400 mt-4 relative z-10">
-            <ArrowUpRight size={14} />
-            <span>Barcha turdagi mahsulotlar</span>
-          </div>
-        </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl group-hover:bg-violet-500/20 transition-all"></div>
           <div className="flex justify-between items-start mb-4 relative z-10">
@@ -86,7 +77,7 @@ export default async function Home() {
           </div>
           <div className="flex items-center gap-2 text-xs font-medium text-brand-400 mt-4 relative z-10">
             <Activity size={14} />
-            <span>Dona hisobida barcha qoldiq</span>
+            <span>Hozirgi mavjud barcha narsalar</span>
           </div>
         </div>
 
@@ -94,16 +85,50 @@ export default async function Home() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-3xl group-hover:bg-rose-500/20 transition-all"></div>
           <div className="flex justify-between items-start mb-4 relative z-10">
             <div>
-              <p className="text-zinc-900/50 text-sm font-medium mb-1">Kam qolganlar</p>
-              <h3 className="text-3xl font-bold text-zinc-900">{lowStock}</h3>
+              <p className="text-zinc-900/50 text-sm font-medium mb-1">Jami Chiqimlar</p>
+              <h3 className="text-3xl font-bold text-zinc-900">{totalTaken.toLocaleString()}</h3>
             </div>
             <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.1)]">
               <TrendingDown size={24} />
             </div>
           </div>
           <div className="flex items-center gap-2 text-xs font-medium text-rose-400 mt-4 relative z-10">
-            <TrendingDown size={14} />
-            <span>Zaxirasi 10 tadan kam qolgan</span>
+            <ArrowDownRight size={14} />
+            <span>Skladdan olingan mahsulotlar</span>
+          </div>
+        </div>
+
+        <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all"></div>
+          <div className="flex justify-between items-start mb-4 relative z-10">
+            <div>
+              <p className="text-zinc-900/50 text-sm font-medium mb-1">Jami Kirim / Qaytgan</p>
+              <h3 className="text-3xl font-bold text-zinc-900">{totalReturned.toLocaleString()}</h3>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+              <TrendingUp size={24} />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-medium text-emerald-500 mt-4 relative z-10">
+            <ArrowUpRight size={14} />
+            <span>Qaytarilgan yoki qo'shilganlar</span>
+          </div>
+        </div>
+
+        <div className="glass-card p-6 rounded-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-3xl group-hover:bg-brand-500/20 transition-all"></div>
+          <div className="flex justify-between items-start mb-4 relative z-10">
+            <div>
+              <p className="text-zinc-900/50 text-sm font-medium mb-1">Jami Turlar</p>
+              <h3 className="text-3xl font-bold text-zinc-900">{totalItems}</h3>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+              <Package size={24} />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-medium text-brand-400 mt-4 relative z-10">
+            <Package size={14} />
+            <span>Turli xil mahsulotlar soni</span>
           </div>
         </div>
       </div>
