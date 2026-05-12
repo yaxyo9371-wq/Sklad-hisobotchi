@@ -7,8 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function MiniAppPage() {
   const items = await prisma.item.findMany({
-    orderBy: { name: 'asc' },
-    where: { quantity: { gt: 0 } }
+    orderBy: { name: 'asc' }
   })
 
   const serializedItems = items.map(i => ({
