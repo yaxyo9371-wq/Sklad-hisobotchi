@@ -18,6 +18,52 @@ type SelectedItem = {
 
 type Step = 'event' | 'items' | 'confirm' | 'done' | 'error'
 
+const cyrillicToLatinMap: Record<string, string> = {
+  'а':'a', 'б':'b', 'в':'v', 'г':'g', 'д':'d', 'е':'e', 'ё':'yo', 'ж':'j', 'з':'z',
+  'и':'i', 'й':'y', 'к':'k', 'л':'l', 'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r',
+  'с':'s', 'т':'t', 'у':'u', 'ф':'f', 'х':'x', 'ц':'ts', 'ч':'ch', 'ш':'sh', 'щ':'shch',
+  'ъ':'', 'ы':'i', 'ь':'', 'э':'e', 'ю':'yu', 'я':'ya', 'ў':'o', 'қ':'q', 'ғ':'g', 'ҳ':'h'
+};
+
+const normalize = (text: string) => {
+  let t = text.toLowerCase();
+  let res = '';
+  for(let char of t) {
+    res += cyrillicToLatinMap[char] || char;
+  }
+  // Remove special chars and spaces for fuzzy match, but maybe we want to keep spaces to allow multi-word
+  return res.replace(/[^a-z0-9 ]/g, ''); 
+}
+
+// Define explicit synonyms for products
+const itemKeywords: Record<string, string[]> = {
+  'biolife': ['suv', 'voda', 'ichimlik'],
+  'montella': ['suv', 'voda', 'ichimlik'],
+  'family': ['suv', 'voda', 'ichimlik'],
+  'dena': ['suv', 'sok', 'voda', 'ichimlik', 'sharbat'],
+  'pepsi': ['suv', 'ichimlik', 'voda', 'gazli', 'kola'],
+  'coca': ['suv', 'ichimlik', 'voda', 'gazli', 'kola'],
+  'lazzat': ['choy', 'tea', 'chay', 'qora choy', 'kok choy'],
+  'svetocopy': ['qogoz', 'bumaga', 'a4', 'qog\'oz'],
+  'snegurochka': ['qogoz', 'bumaga', 'a4', 'qog\'oz'],
+  'maccoffee': ['kofe', 'coffee', 'kofe', 'kofe3v1'],
+  'jacobs': ['kofe', 'coffee', 'kofe'],
+  'salfetka': ['qogoz', 'salfetka', 'bumaga'],
+};
+
+// Cache the searchable text for performance
+const getSearchableText = (itemName: string) => {
+  let normName = normalize(itemName);
+  let extras: string[] = [];
+  
+  for (const [key, keywords] of Object.entries(itemKeywords)) {
+    if (normName.includes(key)) {
+      extras.push(...keywords.map(normalize));
+    }
+  }
+  return normName + " " + extras.join(" ");
+}
+
 declare global {
   interface Window {
     Telegram?: {
@@ -85,9 +131,13 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
   const displayName = tgUser?.name || manualName || ''
   const userId = tgUser?.id || `miniapp_user`
 
-  const filteredItems = items.filter(i =>
-    i.name.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredItems = items.filter(i => {
+    if (!search) return true;
+    const searchTerms = normalize(search).split(' ').filter(Boolean);
+    const searchableText = getSearchableText(i.name);
+    // All words in the search must be present in the searchable text
+    return searchTerms.every(term => searchableText.includes(term));
+  })
 
   const toggleItem = (item: Item) => {
     setSelected(prev => {
