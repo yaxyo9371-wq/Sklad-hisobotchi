@@ -45,6 +45,7 @@ declare global {
 
 export default function MiniAppClient({ items }: { items: Item[] }) {
   const [mounted, setMounted] = useState(false)
+  const [actionType, setActionType] = useState<'TAKE' | 'ADD'>('TAKE')
   const [step, setStep] = useState<Step>('event')
   const [eventName, setEventName] = useState('')
   const [selected, setSelected] = useState<SelectedItem[]>([])
@@ -117,6 +118,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          actionType,
           eventName: eventName.trim(),
           telegramId: userId,
           telegramName: displayName,
@@ -157,11 +159,11 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
         {/* Header */}
         <div className="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/80 shadow-sm px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center shadow-inner">
-              <Package size={20} className="text-brand-500" />
+            <div className={`w-10 h-10 rounded-xl ${actionType === 'TAKE' ? 'bg-brand-500/10 border-brand-500/20' : 'bg-emerald-500/10 border-emerald-500/20'} border flex items-center justify-center shadow-inner`}>
+              <Package size={20} className={actionType === 'TAKE' ? 'text-brand-500' : 'text-emerald-500'} />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-zinc-900 leading-tight">Chiqim kiritish</h1>
+              <h1 className="font-bold text-lg text-zinc-900 leading-tight">{actionType === 'TAKE' ? 'Chiqim kiritish' : 'Qaytarish (Kirim)'}</h1>
               <p className="text-xs font-medium text-zinc-500">{displayName || 'Impulse Sklad'}</p>
             </div>
           </div>
@@ -184,8 +186,23 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
           {/* STEP 1: Event Name */}
           {step === 'event' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div className="flex bg-zinc-200/50 p-1 rounded-xl mb-6 shadow-inner">
+                <button 
+                  onClick={() => setActionType('TAKE')}
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${actionType === 'TAKE' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500 hover:text-zinc-700'}`}
+                >
+                  Chiqim qilish
+                </button>
+                <button 
+                  onClick={() => setActionType('ADD')}
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${actionType === 'ADD' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500 hover:text-zinc-700'}`}
+                >
+                  Qaytarish (Kirim)
+                </button>
+              </div>
+
               <div>
-                <h2 className="text-2xl font-bold text-zinc-900 mb-1 tracking-tight">Qaysi tadbir uchun?</h2>
+                <h2 className="text-2xl font-bold text-zinc-900 mb-1 tracking-tight">Qaysi tadbir?</h2>
                 <p className="text-zinc-500 text-sm font-medium">Tadbir nomini tanlang yoki kiriting</p>
               </div>
 
@@ -342,7 +359,9 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                   <div key={s.item.id} className="bg-white/70 backdrop-blur-md border border-white/80 shadow-sm rounded-2xl p-5 flex justify-between items-center">
                     <div>
                       <div className="font-bold text-zinc-800 text-base tracking-tight">{s.item.name}</div>
-                      <div className="text-rose-500 font-bold text-sm mt-1">-{s.qty} {s.item.unit.toLowerCase()}</div>
+                      <div className={`${actionType === 'TAKE' ? 'text-rose-500' : 'text-emerald-500'} font-bold text-sm mt-1`}>
+                        {actionType === 'TAKE' ? '-' : '+'}{s.qty} {s.item.unit.toLowerCase()}
+                      </div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-zinc-900 text-base tracking-tight" suppressHydrationWarning>
@@ -353,11 +372,11 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                 ))}
               </div>
 
-              <div className="bg-brand-500/5 border border-brand-500/20 rounded-2xl p-6 shadow-inner relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 rounded-full blur-3xl"></div>
+              <div className={`${actionType === 'TAKE' ? 'bg-brand-500/5 border-brand-500/20' : 'bg-emerald-500/5 border-emerald-500/20'} border rounded-2xl p-6 shadow-inner relative overflow-hidden`}>
+                <div className={`absolute top-0 right-0 w-32 h-32 ${actionType === 'TAKE' ? 'bg-brand-500/10' : 'bg-emerald-500/10'} rounded-full blur-3xl`}></div>
                 <div className="flex justify-between items-center relative z-10">
-                  <span className="text-zinc-600 text-sm font-bold tracking-wide uppercase">Jami rasxod</span>
-                  <span className="text-brand-600 font-black text-2xl tracking-tight" suppressHydrationWarning>
+                  <span className="text-zinc-600 text-sm font-bold tracking-wide uppercase">Jami summa</span>
+                  <span className={`${actionType === 'TAKE' ? 'text-brand-600' : 'text-emerald-600'} font-black text-2xl tracking-tight`} suppressHydrationWarning>
                     {totalCost.toLocaleString()} <span className="text-lg">UZS</span>
                   </span>
                 </div>
@@ -396,7 +415,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
               </div>
               <h2 className="text-3xl font-black text-zinc-900 tracking-tight">Muvaffaqiyatli!</h2>
               <p className="text-zinc-500 font-medium text-base text-center leading-relaxed max-w-[250px]">
-                Chiqim saqlandi.<br />Oyna avtomatik yopiladi...
+                {actionType === 'TAKE' ? 'Chiqim' : 'Kirim'} saqlandi.<br />Oyna avtomatik yopiladi...
               </p>
             </div>
           )}

@@ -6,9 +6,9 @@ const prisma = new PrismaClient()
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { eventName, telegramId, telegramName, items } = body
+    const { actionType, eventName, telegramId, telegramName, items } = body
 
-    if (!eventName || !items || items.length === 0) {
+    if (!eventName || !items || items.length === 0 || !actionType) {
       return NextResponse.json({ error: "Ma'lumotlar to'liq emas" }, { status: 400 })
     }
 
@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
       const item = await prisma.item.findUnique({ where: { id: entry.itemId } })
       if (!item) continue
 
-      const newQty = item.quantity - entry.quantity
-      if (newQty < 0) continue // Skip if not enough stock
+      const isTake = actionType === 'TAKE'
+      const newQty = isTake ? item.quantity - entry.quantity : item.quantity + entry.quantity
+      if (isTake && newQty < 0) continue // Skip if not enough stock for TAKE
 
       await prisma.item.update({
         where: { id: entry.itemId },
@@ -39,8 +40,8 @@ export async function POST(req: NextRequest) {
         data: {
           userId: user.id,
           itemId: entry.itemId,
-          quantity: -entry.quantity,
-          type: 'TAKE',
+          quantity: isTake ? -entry.quantity : entry.quantity,
+          type: actionType,
           status: 'APPROVED',
           eventName: eventName,
           totalPrice: entry.totalPrice,
