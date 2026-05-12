@@ -144,17 +144,17 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f13] text-white font-sans" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="min-h-screen bg-[#0f0f13] text-zinc-900 font-sans" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-[#0f0f13]/95 backdrop-blur-sm border-b border-white/5 px-5 py-4">
+      <div className="sticky top-0 z-20 bg-[#0f0f13]/95 backdrop-blur-sm border-b border-white/60 px-5 py-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/20 flex items-center justify-center">
             <Package size={18} className="text-indigo-400" />
           </div>
           <div>
-            <h1 className="font-bold text-base text-white leading-tight">Chiqim kiritish</h1>
-            <p className="text-[11px] text-white/30">{displayName || 'Impulse Sklad'}</p>
+            <h1 className="font-bold text-base text-zinc-900 leading-tight">Chiqim kiritish</h1>
+            <p className="text-[11px] text-zinc-900/30">{displayName || 'Impulse Sklad'}</p>
           </div>
         </div>
 
@@ -177,20 +177,20 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
         {step === 'event' && (
           <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div>
-              <h2 className="text-xl font-black text-white mb-1">Qaysi tadbir uchun?</h2>
-              <p className="text-white/40 text-sm">Tadbir nomi yoki "Impulse" ni kiriting</p>
+              <h2 className="text-xl font-black text-zinc-900 mb-1">Qaysi tadbir uchun?</h2>
+              <p className="text-zinc-900/40 text-sm">Tadbir nomi yoki "Impulse" ni kiriting</p>
             </div>
 
             {/* If Telegram didn't provide name - ask manually */}
             {!tgUser && (
               <div>
-                <label className="block text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Ismingiz</label>
+                <label className="block text-zinc-900/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Ismingiz</label>
                 <input
                   type="text"
                   placeholder="Ismi familyangizni kiriting..."
                   value={manualName}
                   onChange={e => setManualName(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                  className="w-full bg-white/40 border border-white/60 rounded-2xl py-4 px-5 text-zinc-900 placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                 />
               </div>
             )}
@@ -203,7 +203,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                   className={`w-full text-left px-5 py-4 rounded-2xl border transition-all font-bold ${
                     eventName === preset
                       ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
-                      : 'bg-white/5 border-white/5 text-white/70 active:bg-white/10'
+                      : 'bg-white/40 border-white/60 text-zinc-900/70 active:bg-white/10'
                   }`}
                 >
                   {preset}
@@ -217,7 +217,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                 placeholder="Boshqa tadbir nomini yozing..."
                 value={!['Impulse', 'Assodiq', 'Nodir aka', 'Hamza'].includes(eventName) ? eventName : ''}
                 onChange={e => setEventName(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full bg-white/40 border border-white/60 rounded-2xl py-4 px-5 text-zinc-900 placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
               />
             </div>
 
@@ -233,7 +233,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                 }
               }}
               disabled={!eventName.trim() || (!tgUser && !manualName.trim())}
-              className="w-full py-4 rounded-2xl bg-indigo-500 text-white font-black text-sm uppercase tracking-widest disabled:opacity-30 active:bg-indigo-600 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-2xl bg-indigo-500 text-zinc-900 font-black text-sm uppercase tracking-widest disabled:opacity-30 active:bg-indigo-600 transition-all flex items-center justify-center gap-2"
             >
               Davom etish <ChevronRight size={18} />
             </button>
@@ -244,18 +244,18 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
         {step === 'items' && (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div>
-              <h2 className="text-xl font-black text-white mb-1">Mahsulotlarni tanlang</h2>
-              <p className="text-white/40 text-sm">Tadbir: <span className="text-indigo-400 font-bold">{eventName}</span></p>
+              <h2 className="text-xl font-black text-zinc-900 mb-1">Mahsulotlarni tanlang</h2>
+              <p className="text-zinc-900/40 text-sm">Tadbir: <span className="text-indigo-400 font-bold">{eventName}</span></p>
             </div>
 
             <div className="relative">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-900/20" />
               <input
                 type="text"
                 placeholder="Qidirish..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-10 pr-5 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-sm"
+                className="w-full bg-white/40 border border-white/60 rounded-2xl py-3 pl-10 pr-5 text-zinc-900 placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-sm"
               />
             </div>
 
@@ -268,7 +268,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                     className={`rounded-2xl border transition-all ${
                       sel
                         ? 'bg-indigo-500/10 border-indigo-500/40'
-                        : 'bg-white/5 border-white/5'
+                        : 'bg-white/40 border-white/60'
                     }`}
                   >
                     <button
@@ -276,13 +276,13 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                       className="w-full text-left p-4 flex justify-between items-center"
                     >
                       <div>
-                        <div className={`font-bold text-sm ${sel ? 'text-indigo-300' : 'text-white/80'}`}>{item.name}</div>
-                        <div className="text-[11px] text-white/30 mt-0.5">{item.quantity} {item.unit.toLowerCase()} qoldi</div>
+                        <div className={`font-bold text-sm ${sel ? 'text-indigo-300' : 'text-zinc-900/80'}`}>{item.name}</div>
+                        <div className="text-[11px] text-zinc-900/30 mt-0.5">{item.quantity} {item.unit.toLowerCase()} qoldi</div>
                       </div>
                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                         sel ? 'bg-indigo-500 border-indigo-500' : 'border-white/20'
                       }`}>
-                        {sel && <Check size={12} className="text-white" strokeWidth={3} />}
+                        {sel && <Check size={12} className="text-zinc-900" strokeWidth={3} />}
                       </div>
                     </button>
 
@@ -294,8 +294,8 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
                         >
                           <Minus size={16} />
                         </button>
-                        <span className="flex-1 text-center font-black text-lg text-white">
-                          {sel.qty} <span className="text-xs text-white/30 font-normal">{item.unit.toLowerCase()}</span>
+                        <span className="flex-1 text-center font-black text-lg text-zinc-900">
+                          {sel.qty} <span className="text-xs text-zinc-900/30 font-normal">{item.unit.toLowerCase()}</span>
                         </span>
                         <button
                           onClick={() => changeQty(item.id, 1)}
@@ -313,7 +313,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
             <button
               onClick={() => selected.length > 0 && setStep('confirm')}
               disabled={selected.length === 0}
-              className="w-full py-4 rounded-2xl bg-indigo-500 text-white font-black text-sm uppercase tracking-widest disabled:opacity-30 active:bg-indigo-600 transition-all flex items-center justify-center gap-2 sticky bottom-4"
+              className="w-full py-4 rounded-2xl bg-indigo-500 text-zinc-900 font-black text-sm uppercase tracking-widest disabled:opacity-30 active:bg-indigo-600 transition-all flex items-center justify-center gap-2 sticky bottom-4"
             >
               Davom etish ({selected.length} ta) <ChevronRight size={18} />
             </button>
@@ -324,19 +324,19 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
         {step === 'confirm' && (
           <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div>
-              <h2 className="text-xl font-black text-white mb-1">Tasdiqlang</h2>
-              <p className="text-white/40 text-sm">Tadbir: <span className="text-indigo-400 font-bold">{eventName}</span></p>
+              <h2 className="text-xl font-black text-zinc-900 mb-1">Tasdiqlang</h2>
+              <p className="text-zinc-900/40 text-sm">Tadbir: <span className="text-indigo-400 font-bold">{eventName}</span></p>
             </div>
 
             <div className="space-y-3">
               {selected.map(s => (
-                <div key={s.item.id} className="bg-white/5 border border-white/5 rounded-2xl p-4 flex justify-between items-center">
+                <div key={s.item.id} className="bg-white/40 border border-white/60 rounded-2xl p-4 flex justify-between items-center">
                   <div>
-                    <div className="font-bold text-white text-sm">{s.item.name}</div>
+                    <div className="font-bold text-zinc-900 text-sm">{s.item.name}</div>
                     <div className="text-rose-400 font-black text-xs mt-0.5">-{s.qty} {s.item.unit.toLowerCase()}</div>
                   </div>
                   <div className="text-right">
-                    <div className="font-black text-white text-sm" suppressHydrationWarning>
+                    <div className="font-black text-zinc-900 text-sm" suppressHydrationWarning>
                       {(s.item.price * s.qty).toLocaleString()} UZS
                     </div>
                   </div>
@@ -346,7 +346,7 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
 
             <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5">
               <div className="flex justify-between items-center">
-                <span className="text-white/50 text-sm font-medium">Jami rasxod</span>
+                <span className="text-zinc-900/50 text-sm font-medium">Jami rasxod</span>
                 <span className="text-indigo-400 font-black text-xl" suppressHydrationWarning>
                   {totalCost.toLocaleString()} UZS
                 </span>
@@ -356,14 +356,14 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('items')}
-                className="flex-1 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/60 font-bold text-sm active:bg-white/10"
+                className="flex-1 py-4 rounded-2xl bg-white/40 border border-white/60 text-zinc-900/60 font-bold text-sm active:bg-white/10"
               >
                 Orqaga
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-2 flex-grow-[2] py-4 rounded-2xl bg-indigo-500 text-white font-black text-sm uppercase tracking-widest disabled:opacity-50 active:bg-indigo-600 flex items-center justify-center gap-2"
+                className="flex-2 flex-grow-[2] py-4 rounded-2xl bg-indigo-500 text-zinc-900 font-black text-sm uppercase tracking-widest disabled:opacity-50 active:bg-indigo-600 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <span className="animate-pulse">Saqlanmoqda...</span>
@@ -381,8 +381,8 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
             <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
               <Check size={40} className="text-emerald-400" strokeWidth={3} />
             </div>
-            <h2 className="text-2xl font-black text-white">Saqlandi!</h2>
-            <p className="text-white/40 text-sm text-center">
+            <h2 className="text-2xl font-black text-zinc-900">Saqlandi!</h2>
+            <p className="text-zinc-900/40 text-sm text-center">
               Chiqim muvaffaqiyatli qayd etildi.<br />Oyna yopilmoqda...
             </p>
           </div>
@@ -394,8 +394,8 @@ export default function MiniAppClient({ items }: { items: Item[] }) {
             <div className="w-20 h-20 rounded-full bg-rose-500/20 flex items-center justify-center mb-2">
               <AlertCircle size={40} className="text-rose-400" />
             </div>
-            <h2 className="text-2xl font-black text-white">Xatolik!</h2>
-            <p className="text-white/40 text-sm text-center">{errorMsg}</p>
+            <h2 className="text-2xl font-black text-zinc-900">Xatolik!</h2>
+            <p className="text-zinc-900/40 text-sm text-center">{errorMsg}</p>
             <button
               onClick={() => setStep('confirm')}
               className="px-8 py-3 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 font-bold text-sm"

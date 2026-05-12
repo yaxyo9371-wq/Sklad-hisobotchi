@@ -20,34 +20,34 @@ export default async function HistoryPage() {
   return (
     <div className="p-8 max-w-[1600px] mx-auto min-h-full">
       <header className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight mb-2 text-white flex items-center gap-3">
+        <h1 className="text-4xl font-bold tracking-tight mb-2 text-zinc-900 flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center text-violet-400">
             <History size={24} />
           </div>
           Amallar Tarixi
         </h1>
-        <p className="text-white/50 text-sm mt-2">Ombordagi barcha harakatlar (kirim, chiqim, tuzatish) loglari</p>
+        <p className="text-zinc-900/50 text-sm mt-2">Ombordagi barcha harakatlar (kirim, chiqim, tuzatish) loglari</p>
       </header>
 
-      <div className="glass-card rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl bg-white/[0.01]">
-        <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+      <div className="glass-card rounded-[2.5rem] overflow-hidden border border-white/60 shadow-2xl bg-white/[0.01]">
+        <div className="p-8 border-b border-white/60 flex items-center justify-between bg-white/40">
           <div className="flex items-center gap-3">
-            <Settings2 size={20} className="text-white/20" />
-            <span className="font-black text-white/90 uppercase tracking-widest text-sm">Audit Log</span>
+            <Settings2 size={20} className="text-zinc-900/20" />
+            <span className="font-black text-zinc-900/90 uppercase tracking-widest text-sm">Audit Log</span>
           </div>
-          <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Barcha foydalanuvchilar harakati</span>
+          <span className="text-[10px] font-black text-zinc-900/20 uppercase tracking-[0.3em]">Barcha foydalanuvchilar harakati</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/[0.02]">
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Xodim</th>
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Amal turi</th>
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Mahsulot</th>
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Miqdor</th>
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Tadbir/Sabab</th>
-                <th className="p-6 text-[10px] font-black text-white/30 uppercase tracking-widest text-right">Sana va Vaqt</th>
+              <tr className="bg-white/40">
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest">Xodim</th>
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest">Amal turi</th>
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest">Mahsulot</th>
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest">Miqdor</th>
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest">Tadbir/Sabab</th>
+                <th className="p-6 text-[10px] font-black text-zinc-900/30 uppercase tracking-widest text-right">Sana va Vaqt</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -60,10 +60,10 @@ export default async function HistoryPage() {
                   <tr key={t.id} className="hover:bg-white/[0.03] transition-colors group">
                     <td className="p-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/40">
+                        <div className="w-8 h-8 rounded-full bg-white/40 flex items-center justify-center text-zinc-900/40">
                           <UserIcon size={14} />
                         </div>
-                        <span className="font-bold text-white/80 group-hover:text-white transition-colors">
+                        <span className="font-bold text-zinc-900/80 group-hover:text-zinc-900 transition-colors">
                           {t.user.name}
                         </span>
                       </div>
@@ -77,7 +77,7 @@ export default async function HistoryPage() {
                         {isAdd ? 'Kirim' : isTake ? 'Chiqim' : 'Tuzatish'}
                       </span>
                     </td>
-                    <td className="p-6 font-bold text-white/60">
+                    <td className="p-6 font-bold text-zinc-900/60">
                       {t.item.name}
                     </td>
                     <td className="p-6">
@@ -87,15 +87,15 @@ export default async function HistoryPage() {
                       </div>
                     </td>
                     <td className="p-6">
-                       <span className="text-white/40 text-xs font-medium italic">
+                       <span className="text-zinc-900/40 text-xs font-medium italic">
                          {t.eventName || '-'}
                        </span>
                     </td>
                     <td className="p-6 text-right">
-                      <div className="text-white font-bold text-xs" suppressHydrationWarning>
+                      <div className="text-zinc-900 font-bold text-xs" suppressHydrationWarning>
                         {t.createdAt.toLocaleDateString('uz-UZ')}
                       </div>
-                      <div className="text-white/20 text-[10px] mt-0.5 font-bold" suppressHydrationWarning>
+                      <div className="text-zinc-900/20 text-[10px] mt-0.5 font-bold" suppressHydrationWarning>
                         {t.createdAt.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </td>

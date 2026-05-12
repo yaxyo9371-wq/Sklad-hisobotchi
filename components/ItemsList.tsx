@@ -54,27 +54,27 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
   return (
     <div className="flex-1 overflow-x-auto p-0">
       <table className="w-full text-left border-collapse min-w-[600px]">
-        <thead className="bg-dark-900/80 border-b border-white/5">
+        <thead className="bg-white/80 border-b border-white/60">
           <tr>
-            <th className="p-5 font-medium text-white/40 text-xs uppercase tracking-wider">#</th>
-            <th className="p-5 font-medium text-white/40 text-xs uppercase tracking-wider">Mahsulot Nomi</th>
-            <th className="p-5 font-medium text-white/40 text-xs uppercase tracking-wider">Narxi</th>
-            <th className="p-5 font-medium text-white/40 text-xs uppercase tracking-wider">Hozirgi Qoldiq</th>
-            <th className="p-5 font-medium text-white/40 text-xs uppercase tracking-wider text-right">Amal</th>
+            <th className="p-5 font-medium text-zinc-900/40 text-xs uppercase tracking-wider">#</th>
+            <th className="p-5 font-medium text-zinc-900/40 text-xs uppercase tracking-wider">Mahsulot Nomi</th>
+            <th className="p-5 font-medium text-zinc-900/40 text-xs uppercase tracking-wider">Narxi</th>
+            <th className="p-5 font-medium text-zinc-900/40 text-xs uppercase tracking-wider">Hozirgi Qoldiq</th>
+            <th className="p-5 font-medium text-zinc-900/40 text-xs uppercase tracking-wider text-right">Amal</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5">
           {initialItems.map((item, idx) => (
-            <tr key={item.id} className="hover:bg-white/[0.02] transition-colors group">
-              <td className="p-5 text-white/30 text-sm">{idx + 1}</td>
+            <tr key={item.id} className="hover:bg-white/40 transition-colors group">
+              <td className="p-5 text-zinc-900/30 text-sm">{idx + 1}</td>
               <td className="p-5">
-                <div className="font-bold text-white/90 group-hover:text-brand-400 transition-colors">{item.name}</div>
-                <div className="text-[10px] text-white/20 uppercase font-bold mt-1 tracking-wider" suppressHydrationWarning>
+                <div className="font-bold text-zinc-900/90 group-hover:text-brand-400 transition-colors">{item.name}</div>
+                <div className="text-[10px] text-zinc-900/20 uppercase font-bold mt-1 tracking-wider" suppressHydrationWarning>
                   Oxirgi o'zgarish: {new Date(item.updatedAt).toLocaleDateString('uz-UZ')}
                 </div>
               </td>
               <td className="p-5">
-                <span className="text-white/80 font-medium" suppressHydrationWarning>{item.price.toLocaleString('uz-UZ')} UZS</span>
+                <span className="text-zinc-900/80 font-medium" suppressHydrationWarning>{item.price.toLocaleString('uz-UZ')} UZS</span>
               </td>
               <td className="p-5">
                 <span className={`inline-flex items-center justify-center px-3 py-1 rounded-lg text-sm font-black border ${
@@ -96,7 +96,7 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
                     setEditingItem(item)
                     setNewQuantity(item.quantity.toString())
                   }}
-                  className="px-4 py-2 rounded-xl bg-white/5 text-white/60 hover:bg-brand-500/20 hover:text-brand-400 transition-all border border-white/5 inline-flex items-center gap-2 text-xs font-bold relative z-10"
+                  className="px-4 py-2 rounded-xl bg-white/40 text-zinc-900/60 hover:bg-brand-500/20 hover:text-brand-400 transition-all border border-white/60 inline-flex items-center gap-2 text-xs font-bold relative z-10"
                 >
                   <Edit3 size={14} />
                   TUZATISH
@@ -111,13 +111,13 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
       {editingItem && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setEditingItem(null)}></div>
-          <div className="glass-card w-full max-w-md rounded-[2.5rem] border border-white/10 shadow-2xl relative z-[10000] overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+          <div className="glass-card w-full max-w-md rounded-[2.5rem] border border-white/60 shadow-2xl relative z-[10000] overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-8 border-b border-white/60 flex justify-between items-center bg-white/40">
               <div>
-                <h3 className="text-xl font-black text-white uppercase tracking-tight">Qoldiqni tuzatish</h3>
-                <p className="text-white/40 text-xs mt-1">{editingItem.name}</p>
+                <h3 className="text-xl font-black text-zinc-900 uppercase tracking-tight">Qoldiqni tuzatish</h3>
+                <p className="text-zinc-900/40 text-xs mt-1">{editingItem.name}</p>
               </div>
-              <button type="button" onClick={() => setEditingItem(null)} className="text-white/20 hover:text-white transition-colors p-2">
+              <button type="button" onClick={() => setEditingItem(null)} className="text-zinc-900/20 hover:text-zinc-900 transition-colors p-2">
                 <X size={24} />
               </button>
             </div>
@@ -131,7 +131,7 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
               </div>
 
               <div>
-                <label className="block text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Yangi Qoldiq Soni</label>
+                <label className="block text-zinc-900/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Yangi Qoldiq Soni</label>
                 <div className="relative">
                   <input 
                     type="number" 
@@ -139,19 +139,19 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
                     onChange={(e) => setNewQuantity(e.target.value)}
                     required
                     autoFocus
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 px-6 text-white font-black focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all text-2xl"
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 px-6 text-zinc-900 font-black focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all text-2xl"
                   />
-                  <span className="absolute right-6 top-1/2 -translate-y-1/2 text-white/20 font-bold uppercase text-xs">{editingItem.unit}</span>
+                  <span className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-900/20 font-bold uppercase text-xs">{editingItem.unit}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-white/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Sabab</label>
+                <label className="block text-zinc-900/40 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Sabab</label>
                 <input 
                   type="text" 
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                  className="w-full bg-white/40 border border-white/60 rounded-2xl py-4 px-6 text-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                 />
               </div>
 
@@ -159,14 +159,14 @@ export default function ItemsList({ initialItems }: { initialItems: Item[] }) {
                 <button 
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="flex-1 py-4 rounded-2xl bg-white/5 text-white/40 font-bold hover:bg-white/10 transition-all uppercase text-xs tracking-widest"
+                  className="flex-1 py-4 rounded-2xl bg-white/40 text-zinc-900/40 font-bold hover:bg-white/10 transition-all uppercase text-xs tracking-widest"
                 >
                   Bekor qilish
                 </button>
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-4 rounded-2xl bg-brand-500 text-black font-black hover:bg-brand-400 transition-all shadow-lg shadow-brand-500/20 uppercase text-xs tracking-widest disabled:opacity-50"
+                  className="flex-1 py-4 rounded-2xl bg-brand-500 text-black font-black hover:bg-brand-400 transition-all shadow-lg shadow-black/10 uppercase text-xs tracking-widest disabled:opacity-50"
                 >
                   {loading ? 'SAQLANMOQDA...' : 'SAQLASH'}
                 </button>
