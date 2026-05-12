@@ -24,7 +24,7 @@ bot.start(async (ctx) => {
   if (ctx.chat.type !== 'private') {
     return ctx.reply("Assalomu alaykum! Sklad bot guruhga qo'shildi.\nQuyidagi tugma orqali mahsulotlarni to'g'ridan-to'g'ri kiritishingiz mumkin:",
       Markup.inlineKeyboard([
-        [Markup.button.webApp('📦 Chiqim / Kirim', miniAppUrl)]
+        [Markup.button.url('📦 Chiqim / Kirim', miniAppUrl)]
       ])
     );
   }
@@ -53,10 +53,11 @@ bot.start(async (ctx) => {
 
 // /chiqim command - quick access to Mini App
 bot.command('chiqim', async (ctx) => {
+  const btn = ctx.chat.type === 'private' ? Markup.button.webApp('📦 Chiqim kiritish', miniAppUrl) : Markup.button.url('📦 Chiqim kiritish', miniAppUrl);
   await ctx.reply(
     '📦 Chiqim kiritish uchun quyidagi tugmani bosing:',
     Markup.inlineKeyboard([
-      [Markup.button.webApp('📦 Chiqim kiritish', miniAppUrl)]
+      [btn]
     ])
   );
 });
@@ -92,9 +93,10 @@ async function processGeminiResponse(ctx: any, msg: any, result: any) {
     }
 
     if (parsedData.error) {
+      const btn = ctx.chat?.type === 'private' ? Markup.button.webApp('📦 Dastur orqali kiritish', miniAppUrl) : Markup.button.url('📦 Dastur orqali kiritish', miniAppUrl);
       return ctx.telegram.editMessageText(ctx.chat.id, msg.message_id, undefined, '❌ ' + parsedData.error + '\n\nYoki quyidagi tugma orqali oson kiriting:',
         Markup.inlineKeyboard([
-          [Markup.button.webApp('📦 Dastur orqali kiritish', miniAppUrl)]
+          [btn]
         ])
       );
     }
@@ -111,12 +113,13 @@ async function processGeminiResponse(ctx: any, msg: any, result: any) {
     }
     confirmMsg += `\n🔄 Amal turini tasdiqlang (${action}):`;
 
+    const btn = ctx.chat?.type === 'private' ? Markup.button.webApp('📦 Mini App', miniAppUrl) : Markup.button.url('📦 Mini App', miniAppUrl);
     ctx.telegram.editMessageText(ctx.chat.id, msg.message_id, undefined, 
       confirmMsg, 
       Markup.inlineKeyboard([
         [Markup.button.callback('✅ Tasdiqlash', `confirm_tx_${txId}`)],
         [Markup.button.callback('❌ Bekor qilish', 'cancel_tx')],
-        [Markup.button.webApp('📦 Mini App', miniAppUrl)]
+        [btn]
       ])
     );
 }
