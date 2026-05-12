@@ -26,11 +26,12 @@ export default async function AnalyticsPage() {
     totalCost: number, 
     impulseCost: number,
     externalEventCount: number,
-    eventsMap: Record<string, any> 
+    eventsMap: Record<string, any>,
+    productsMap: Record<string, any>
   }> = {}
 
   last3MonthKeys.forEach(m => {
-    monthDataMap[m] = { monthName: m, totalCost: 0, impulseCost: 0, externalEventCount: 0, eventsMap: {} }
+    monthDataMap[m] = { monthName: m, totalCost: 0, impulseCost: 0, externalEventCount: 0, eventsMap: {}, productsMap: {} }
   })
 
   // Global events map for the "Tadbirlar Ketma-ketligi" section
@@ -83,6 +84,19 @@ export default async function AnalyticsPage() {
         cost: itemCost,
         unit: t.item.unit
       })
+
+      // Product aggregation per month
+      if (!monthDataMap[monthKey].productsMap[t.item.name]) {
+        monthDataMap[monthKey].productsMap[t.item.name] = {
+          name: t.item.name,
+          quantity: 0,
+          cost: 0,
+          unit: t.item.unit
+        }
+      }
+      const mProd = monthDataMap[monthKey].productsMap[t.item.name]
+      mProd.quantity += Math.abs(t.quantity)
+      mProd.cost += itemCost
     }
   })
 
@@ -91,7 +105,8 @@ export default async function AnalyticsPage() {
     totalCost: monthDataMap[key].totalCost,
     impulseCost: monthDataMap[key].impulseCost,
     externalEventCount: monthDataMap[key].externalEventCount,
-    events: Object.values(monthDataMap[key].eventsMap)
+    events: Object.values(monthDataMap[key].eventsMap),
+    products: Object.values(monthDataMap[key].productsMap).sort((a: any, b: any) => b.cost - a.cost)
   }))
 
   const allEventsArray = Object.values(globalEventsMap).sort((a, b) => {

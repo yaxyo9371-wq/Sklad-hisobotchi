@@ -24,6 +24,7 @@ type Month = {
   events: Event[]
   impulseCost: number
   externalEventCount: number
+  products: Item[]
 }
 
 type RecentTransaction = {
@@ -52,6 +53,7 @@ export default function AnalyticsDashboard({
   const [selectedMonth, setSelectedMonth] = useState<Month | null>(null)
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null)
   const [expandedEventInModal, setExpandedEventInModal] = useState<string | null>(null)
+  const [modalTab, setModalTab] = useState<'events' | 'products'>('events')
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto min-h-full">
@@ -231,77 +233,131 @@ export default function AnalyticsDashboard({
           
           <div className="glass-card w-full max-w-5xl max-h-[90vh] rounded-[2.5rem] border border-white/60 shadow-2xl flex flex-col relative z-10 overflow-hidden animate-in fade-in zoom-in duration-300">
             {/* Modal Header */}
-            <div className="p-8 border-b border-white/60 flex justify-between items-center bg-white/40">
-              <div>
-                <h2 className="text-3xl font-black text-zinc-900 uppercase tracking-tight">{selectedMonth.monthName} Hisoboti</h2>
-                <div className="text-zinc-900/40 text-sm mt-1 flex items-center gap-2">
-                  <TrendingUp size={14} className="text-brand-400" />
-                  <span>Jami {selectedMonth.events.length} ta tadbir o'tkazilgan</span>
+            <div className="p-8 border-b border-white/60 bg-white/40">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-3xl font-black text-zinc-900 uppercase tracking-tight">{selectedMonth.monthName} Hisoboti</h2>
+                  <div className="text-zinc-900/40 text-sm mt-1 flex items-center gap-2">
+                    <TrendingUp size={14} className="text-brand-400" />
+                    <span>Jami {selectedMonth.events.length} ta tadbir o'tkazilgan</span>
+                  </div>
                 </div>
+                <button 
+                  onClick={() => setSelectedMonth(null)}
+                  className="w-12 h-12 rounded-2xl bg-white/40 flex items-center justify-center text-zinc-900/40 hover:bg-rose-500/20 hover:text-rose-400 transition-all"
+                >
+                  <X size={24} />
+                </button>
               </div>
-              <button 
-                onClick={() => setSelectedMonth(null)}
-                className="w-12 h-12 rounded-2xl bg-white/40 flex items-center justify-center text-zinc-900/40 hover:bg-rose-500/20 hover:text-rose-400 transition-all"
-              >
-                <X size={24} />
-              </button>
+
+              {/* Modal Tabs */}
+              <div className="flex gap-2 p-1 bg-black/5 rounded-2xl w-fit">
+                <button 
+                  onClick={() => setModalTab('events')} 
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${modalTab === 'events' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-900/50 hover:text-zinc-900/70'}`}
+                >
+                  Tadbirlar ro'yxati
+                </button>
+                <button 
+                  onClick={() => setModalTab('products')} 
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${modalTab === 'products' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-900/50 hover:text-zinc-900/70'}`}
+                >
+                  Oylik mahsulot sarfi
+                </button>
+              </div>
             </div>
 
-            {/* Modal Content - ACCORDION STYLE */}
+            {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-              <div className="space-y-4">
-                {selectedMonth.events.map((event, idx) => {
-                  const eventKeyInModal = `modal_${event.key}_${idx}`;
-                  const isExpanded = expandedEventInModal === eventKeyInModal;
-                  
-                  return (
-                    <div key={eventKeyInModal} className="glass-card rounded-2xl border border-white/60 overflow-hidden">
-                      <button 
-                        onClick={() => setExpandedEventInModal(isExpanded ? null : eventKeyInModal)}
-                        className="w-full p-6 text-left flex justify-between items-center bg-white/[0.03] hover:bg-white/[0.05] transition-colors"
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${event.name.toLowerCase().includes('impulse') ? 'bg-violet-500/10 text-violet-400' : 'bg-brand-500/10 text-brand-400'}`}>
-                            <Calendar size={18} />
+              {modalTab === 'events' ? (
+                <div className="space-y-4">
+                  {selectedMonth.events.map((event, idx) => {
+                    const eventKeyInModal = `modal_${event.key}_${idx}`;
+                    const isExpanded = expandedEventInModal === eventKeyInModal;
+                    
+                    return (
+                      <div key={eventKeyInModal} className="glass-card rounded-2xl border border-white/60 overflow-hidden">
+                        <button 
+                          onClick={() => setExpandedEventInModal(isExpanded ? null : eventKeyInModal)}
+                          className="w-full p-6 text-left flex justify-between items-center bg-white/[0.03] hover:bg-white/[0.05] transition-colors"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${event.name.toLowerCase().includes('impulse') ? 'bg-violet-500/10 text-violet-400' : 'bg-brand-500/10 text-brand-400'}`}>
+                              <Calendar size={18} />
+                            </div>
+                            <div>
+                              <h4 className={`font-bold ${event.name.toLowerCase().includes('impulse') ? 'text-violet-400' : 'text-zinc-900'}`}>
+                                {event.name}
+                              </h4>
+                              <p className="text-xs text-zinc-900/30 mt-0.5">{event.date}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className={`font-bold ${event.name.toLowerCase().includes('impulse') ? 'text-violet-400' : 'text-zinc-900'}`}>
-                              {event.name}
-                            </h4>
-                            <p className="text-xs text-zinc-900/30 mt-0.5">{event.date}</p>
+                          <div className="flex items-center gap-6">
+                            <div className="text-right">
+                              <div className="text-lg font-black text-zinc-900" suppressHydrationWarning>{event.totalCost.toLocaleString('uz-UZ')} UZS</div>
+                            </div>
+                            <div className="text-zinc-900/20">
+                              {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-6">
-                          <div className="text-right">
-                            <div className="text-lg font-black text-zinc-900" suppressHydrationWarning>{event.totalCost.toLocaleString('uz-UZ')} UZS</div>
-                          </div>
-                          <div className="text-zinc-900/20">
-                            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                          </div>
-                        </div>
-                      </button>
-                      
-                      {isExpanded && (
-                        <div className="p-6 bg-black/30 border-t border-white/60 animate-in slide-in-from-top-1 duration-200">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {event.items.map((item, i) => (
-                              <div key={i} className="flex justify-between items-center p-4 rounded-xl bg-white/40 border border-white/60">
-                                <div>
-                                  <div className="text-sm font-bold text-zinc-900/80">{item.name}</div>
-                                  <div className="text-xs text-rose-400 font-bold mt-1">-{item.quantity} {item.unit.toLowerCase()}</div>
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="p-6 bg-black/30 border-t border-white/60 animate-in slide-in-from-top-1 duration-200">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {event.items.map((item, i) => (
+                                <div key={i} className="flex justify-between items-center p-4 rounded-xl bg-white/40 border border-white/60">
+                                  <div>
+                                    <div className="text-sm font-bold text-zinc-900/80">{item.name}</div>
+                                    <div className="text-xs text-rose-400 font-bold mt-1">-{item.quantity} {item.unit.toLowerCase()}</div>
+                                  </div>
+                                  <div className="text-right text-sm font-black text-zinc-900/60" suppressHydrationWarning>
+                                    {item.cost.toLocaleString('uz-UZ')} UZS
+                                  </div>
                                 </div>
-                                <div className="text-right text-sm font-black text-zinc-900/60" suppressHydrationWarning>
-                                  {item.cost.toLocaleString('uz-UZ')} UZS
-                                </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="glass-card rounded-[2rem] overflow-hidden border border-white/60 bg-white/[0.02]">
+                  <table className="w-full text-left border-collapse">
+                    <thead className="bg-white/40 sticky top-0 z-10 backdrop-blur-md">
+                      <tr>
+                        <th className="p-5 font-bold text-zinc-900/40 text-[10px] uppercase tracking-widest">Mahsulot nomi</th>
+                        <th className="p-5 font-bold text-zinc-900/40 text-[10px] uppercase tracking-widest text-center">Oylik sarf miqdori</th>
+                        <th className="p-5 font-bold text-zinc-900/40 text-[10px] uppercase tracking-widest text-right">Oylik sarf summasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {selectedMonth.products.map((item, i) => (
+                        <tr key={i} className="hover:bg-white/20 transition-colors group">
+                          <td className="p-5">
+                            <div className="font-bold text-zinc-900 group-hover:text-brand-500 transition-colors">{item.name}</div>
+                          </td>
+                          <td className="p-5 text-center">
+                            <span className="inline-block px-3 py-1 rounded-lg bg-rose-500/10 text-rose-500 font-black text-sm">
+                              -{item.quantity} {item.unit.toLowerCase()}
+                            </span>
+                          </td>
+                          <td className="p-5 text-right font-black text-zinc-900" suppressHydrationWarning>
+                            {item.cost.toLocaleString('uz-UZ')} UZS
+                          </td>
+                        </tr>
+                      ))}
+                      {selectedMonth.products.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="p-8 text-center text-zinc-900/30 font-medium">Bu oyda mahsulot ishlatilmagan</td>
+                        </tr>
                       )}
-                    </div>
-                  );
-                })}
-              </div>
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Modal Footer */}
