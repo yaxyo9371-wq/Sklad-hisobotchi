@@ -9,7 +9,11 @@ dotenv.config({ path: resolve(process.cwd(), '.env') });
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const geminiKey = process.env.GEMINI_API_KEY;
-const miniAppUrl = process.env.MINI_APP_URL || 'https://your-app.vercel.app/mini-app';
+const miniAppUrl =
+  process.env.MINI_APP_URL ||
+  (process.env.RAILWAY_PUBLIC_DOMAIN
+    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/mini-app`
+    : 'https://your-app.vercel.app/mini-app');
 
 
 if (!botToken || botToken === 'BU_YERGA_TOKEN_YOZING') {
